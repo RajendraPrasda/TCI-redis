@@ -1,23 +1,17 @@
-language: java
-dist: bionic
-arch: amd64
+language: node_js
+node_js:
+  - "12"
 
-jobs:
-  include:
-    - name: "Java 8 Build"
-      jdk: openjdk8
-      script:
-        - echo "Running Java 8 build and tests..."
-        # - mvn clean install # Replace with your actual Java 8 build command
+services:
+  - redis-server
 
-    - name: "Java 11 Build"
-      jdk: openjdk11
-      script:
-        - echo "Running Java 11 build and tests..."
-        # - mvn clean install # Replace with your actual Java 11 build command
+before_install:
+  - sudo systemctl start redis-server
 
-    - name: "Java 17 Build"
-      jdk: openjdk17
-      script:
-        - echo "Running Java 17 build and tests..."
-        # - mvn clean install # Replace with your actual Java 17 build command
+install:
+  - cd $TRAVIS_BUILD_DIR
+  - npm init -y  # This creates a package.json file if it's missing
+  - npm install
+
+script:
+  - npm test
